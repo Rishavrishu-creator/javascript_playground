@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+        Hi
+    </h1>
+    <input type="text" placeholder="Enter message" id="text">
+<br>
+    <button type="submit" onclick="sendMessage()">
+        Submit
+    </button>
+    <div id="messages">
+
+    </div>
+    <script language="javascript">
+        var ws;
+        
+             ws=new WebSocket("ws://35.154.17.237:8080")
+            var name = prompt("Enter your name")
+            
+                ws.send("mycustom "+name)
+        
+        ws.onmessage=message=>{
+              var html="<p>"+message.data+"</p>"
+              document.getElementById("messages").innerHTML+=html
+        }
+        function sendMessage()
+        {
+            var message=document.getElementById("text").value;
+            ws.send(message);
+        }
+
+    </script>
+</body>
+</html>

@@ -52,9 +52,12 @@ const websocket = new WebSocketServer({
 })
 
 app.get('/',function(req,res){
+  res.render("chat.ejs")
+})
+app.get('/chat',function(req,res){
+  connections.forEach(c => c.send("Someone has joined the chat"))
   res.render("index.ejs")
 })
-
 
 httpserver.listen(8080, () => console.log("My server is listening on port 8080"))
 
@@ -64,16 +67,8 @@ websocket.on("request", request=> {
     const con = request.accept(null, request.origin)
    // con.on("open", () => console.log("opened"))
     con.on("message", message => {
-      if(message.utf8Data.split(" ")[0]=="mycustom")
-      {
-        names.push(message.utf8Data.split(" ")[1])
-        connections.forEach(function(c){
-          c.send(message.utf8Data.split(" ")[1]+" has just joined the chat")
-        })
-      }
-      else{
+      
         publisher.publish("livechat", message.utf8Data)
-      }
         //publish the message to redis
         //console.log(`${APPID} Received message ${message.utf8Data}`)
        

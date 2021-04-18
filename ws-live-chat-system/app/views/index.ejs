@@ -6,39 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>
-        Hi
-    </h1>
-    <input type="text" placeholder="Enter message" id="text">
+
+
+    <form method="GET" action="/chat">
+<input type="text" placeholder="Enter your name" required>
 <br>
-    <button type="submit" onclick="sendMessage()">
-        Submit
+       
+        <button type="submit">
+        Join room
     </button>
-    <div id="messages">
-
-    </div>
-    <script language="javascript">
-        var ws;
-        window.onload=function()
-        {
-             ws=new WebSocket("ws://35.154.17.237:8080")
-            var name = prompt("Enter your name")
-            if(name!=null)
-            {
-                ws.send("mycustom "+name)
-            }
-        }
-        
-        ws.onmessage=message=>{
-              var html="<p>"+message.data+"</p>"
-              document.getElementById("messages").innerHTML+=html
-        }
-        function sendMessage()
-        {
-            var message=document.getElementById("text").value;
-            ws.send(message);
-        }
-
-    </script>
+    </form>
+    
 </body>
 </html>
