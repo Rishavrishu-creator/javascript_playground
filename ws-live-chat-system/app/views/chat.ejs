@@ -21,9 +21,7 @@
         var ws;
         
              ws=new WebSocket("ws://35.154.17.237:8080")
-            var name = prompt("Enter your name")
             
-                ws.send("mycustom "+name)
         
         ws.onmessage=message=>{
               var html="<p>"+message.data+"</p>"
