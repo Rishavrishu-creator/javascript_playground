@@ -18,15 +18,17 @@
 
     </div>
     <script language="javascript">
+        var ws;
         window.onload=function()
         {
+             ws=new WebSocket("ws://35.154.17.237:8080")
             var name = prompt("Enter your name")
             if(name!=null)
             {
-                ws.send(name+" has just joined the chat-room")
+                ws.send("mycustom "+name)
             }
         }
-        var ws=new WebSocket("ws://35.154.17.237:8080")
+        
         ws.onmessage=message=>{
               var html="<p>"+message.data+"</p>"
               document.getElementById("messages").innerHTML+=html

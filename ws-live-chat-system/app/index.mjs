@@ -9,7 +9,7 @@ import ejs from "ejs"
 app.set('view engine','ejs')
 app.use(express.static('public'))
 var app=express()
-
+var names=[]
 
 const subscriber = redis.createClient({
   port      : 6379,              
@@ -21,14 +21,14 @@ const publisher = redis.createClient({
   
  
 subscriber.on("subscribe", function(channel, count) {
-  console.log(`Server ${APPID} subscribed successfully to livechat`)
+  //console.log(`Server ${APPID} subscribed successfully to livechat`)
   publisher.publish("livechat", "a message");
 });
  
 subscriber.on("message", function(channel, message) {
   try{
   //when we receive a message I want t
-  console.log(`Server ${APPID} received message in channel ${channel} msg: ${message}`);
+  //console.log(`Server ${APPID} received message in channel ${channel} msg: ${message}`);
   connections.forEach(c => c.send(APPID + ":" + message))
     
   }
@@ -62,14 +62,23 @@ httpserver.listen(8080, () => console.log("My server is listening on port 8080")
 websocket.on("request", request=> {
 
     const con = request.accept(null, request.origin)
-    con.on("open", () => console.log("opened"))
+   // con.on("open", () => console.log("opened"))
     con.on("message", message => {
-        //publish the message to redis
-        console.log(`${APPID} Received message ${message.utf8Data}`)
+      if(message.utf8Data.split(" ")[0]=="mycustom")
+      {
+        names.push(message.utf8Data.split(" ")[1])
+        connections.forEach(function(c){
+          c.send(message.utf8Data.split(" ")[1]+" has just joined the chat")
+        })
+      }
+      else{
         publisher.publish("livechat", message.utf8Data)
+      }
+        //publish the message to redis
+        //console.log(`${APPID} Received message ${message.utf8Data}`)
+       
     })
-
-    setTimeout(() => con.send(`Connected successfully to server ${APPID}`), 5000)
+    
     connections.push(con)
   
 
