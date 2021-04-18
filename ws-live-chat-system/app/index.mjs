@@ -5,6 +5,9 @@ const APPID = process.env.APPID;
 let connections = [];
 const WebSocketServer = ws.server
 import express from "express"
+import ejs from "ejs"
+app.set('view engine','ejs')
+app.use(express.static('public'))
 var app=express()
 
 
@@ -60,7 +63,6 @@ websocket.on("request", request=> {
 
     const con = request.accept(null, request.origin)
     con.on("open", () => console.log("opened"))
-    con.on("close", () => console.log("CLOSED!!!"))
     con.on("message", message => {
         //publish the message to redis
         console.log(`${APPID} Received message ${message.utf8Data}`)
