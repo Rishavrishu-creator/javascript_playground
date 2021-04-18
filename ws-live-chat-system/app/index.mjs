@@ -53,7 +53,7 @@ app.get('/',function(req,res){
 })
 
 
-httpserver.listen(8000, () => console.log("My server is listening on port 8080"))
+httpserver.listen(8080, () => console.log("My server is listening on port 8080"))
 
 //when a legit websocket request comes listen to it and get the connection .. once you get a connection thats it! 
 websocket.on("request", request=> {
