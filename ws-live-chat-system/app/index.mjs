@@ -4,6 +4,8 @@ import redis from "redis";
 const APPID = process.env.APPID;
 let connections = [];
 const WebSocketServer = ws.server
+import express from "express"
+var app=express()
 
 
 const subscriber = redis.createClient({
@@ -36,16 +38,22 @@ subscriber.on("message", function(channel, message) {
 subscriber.subscribe("livechat");
 
 
+
+
 //create a raw http server (this will help us create the TCP which will then pass to the websocket to do the job)
-const httpserver = http.createServer()
+const httpserver = http.createServer(app)
 
 //pass the httpserver object to the WebSocketServer library to do all the job, this class will override the req/res 
 const websocket = new WebSocketServer({
     "httpServer": httpserver
 })
 
+app.get('/',function(req,res){
+  res.render("index.ejs")
+})
 
-httpserver.listen(8080, () => console.log("My server is listening on port 8080"))
+
+httpserver.listen(8000, () => console.log("My server is listening on port 8080"))
 
 //when a legit websocket request comes listen to it and get the connection .. once you get a connection thats it! 
 websocket.on("request", request=> {
